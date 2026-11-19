@@ -4,4 +4,9 @@ import * as path from "node:path";
 
 const outDir = "/output";
 fs.mkdirSync(outDir, { recursive: true });
-fs.copyFileSync(path.join(import.meta.dirname, "entry.jpg"), path.join(outDir, "entry.png"));
+const src = path.join(import.meta.dirname, "entry.jpg");
+if (!fs.existsSync(src)) {
+  throw new Error(`missing bundled image: ${src}`);
+}
+fs.copyFileSync(src, path.join(outDir, "entry.png"));
+console.log("entry.png written:", fs.statSync(path.join(outDir, "entry.png")).size, "bytes");
